@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Carousel</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-fullscreen/1.2.0/jquery.fullscreen-min.js"></script>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .video-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: black;
+      cursor: none;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+
+<div class="video-container">
+  <video autoplay muted id="videoPlayer">
+    <source src=
+  </video>
+</div>
+
+<script>
+  window.addEventListener("load", function() {
+    var elem = document.documentElement;
+    var requestFullScreen = elem.requestFullscreen || elem.mozRequestFullScreen || elem.webkitRequestFullscreen || elem.msRequestFullscreen;
+
+    if (requestFullScreen) {
+        requestFullScreen.call(elem);
+    }
+});
+  $(document).ready(function() {
+    var videos = ["video/Loja2/video1.mp4","video/Loja2/video2.mp4","video/Loja2/video3.mp4"]; // Adicione os URLs dos seus vídeos aqui
+    var currentVideoIndex = 0;
+    var videoPlayer = document.getElementById("videoPlayer");
+
+    videoPlayer.addEventListener("ended", playNextVideo);
+
+    function playNextVideo() {
+      currentVideoIndex = (currentVideoIndex + 1) % videos.length;
+      videoPlayer.src = videos[currentVideoIndex];
+      videoPlayer.play();
+    }
+
+    // Entrar em tela cheia automaticamente
+    $(document).fullscreen();
+
+    // Mudar para o próximo vídeo quando o vídeo atual entra em tela cheia
+    $(document).on('fullscreenchange', function() {
+      if (document.fullscreenElement === null) {
+        playNextVideo();
+      }
+    });
+  });
+
+  function refreshPage() {
+    location.reload(true); // true para recarregar a página ignorando o cache do navegador
+}
+
+// Define o intervalo de tempo para atualizar a página (em milissegundos)
+var intervaloDeAtualizacao = 60000; // 60000 milissegundos = 1 minuto
+
+// Configura o temporizador para chamar a função refreshPage a cada intervaloDeAtualizacao
+setTimeout(refreshPage, intervaloDeAtualizacao);
+  
+</script>
+
+</body>
+</html>
